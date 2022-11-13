@@ -12,7 +12,7 @@ from kivy.uix.widget import Widget
 getcontext().prec = 13 + 4
 Config.set('input', 'mouse', 'mouse,multitouch_on_demand')  # disable the right click red dot
 
-
+ServerIp = ""
 def popupError(String):
     app = App.get_running_app()
     popuperror = Popup(title='Error', content=Label(text=String), size_hint=(None, None),
@@ -27,7 +27,7 @@ class AuthPage(Screen):
 
     def auth(self, name, pin):
         try:
-            atm = Pyro5.api.Proxy("PYRONAME:example.Atm")
+            atm = Pyro5.api.Proxy(ServerIp)
             self.authCode = atm.Auth(pin, name)
             if self.authCode == "Invalid credentials" or self.authCode == "backend error":
                 popupError(self.authCode)
@@ -44,7 +44,7 @@ class AuthPage(Screen):
 class ChoosePage(Screen):
     def updateBalance(self):
         try:
-            atm = Pyro5.api.Proxy("PYRONAME:example.Atm")
+            atm = Pyro5.api.Proxy(ServerIp)
             authCode = self.manager.get_screen('auth').getAuthCode()
             money = Decimal(atm.getBalance(authCode))
             money = round(money, 2)
@@ -64,7 +64,7 @@ class ChoosePage(Screen):
 class WithdrawPage(Screen):
     def withdraw(self, value):
         try:
-            atm = Pyro5.api.Proxy("PYRONAME:example.Atm")
+            atm = Pyro5.api.Proxy(ServerIp)
             money = Decimal(value)
             authCode = self.manager.get_screen('auth').getAuthCode()
             answer = atm.withdraw(authCode, money)
@@ -83,7 +83,7 @@ class WithdrawPage(Screen):
 class DepositPage(Screen):
     def deposit(self, value):
         try:
-            atm = Pyro5.api.Proxy("PYRONAME:example.Atm")
+            atm = Pyro5.api.Proxy(ServerIp)
             money = Decimal(value)
             authCode = self.manager.get_screen('auth').getAuthCode()
             answer = atm.deposit(authCode, money)
@@ -114,4 +114,20 @@ class AtmApp(App):
 
 
 if __name__ == '__main__':
-    AtmApp().run()
+
+    #get server ip from terminal argument
+    import sys
+    if len(sys.argv) > 1:
+        ServerIp = sys.argv[1]
+        try: # check if ip is valid
+            atm = Pyro5.api.Proxy(ServerIp)
+        except Exception:
+            print("Invalid IP")
+            exit()
+        AtmApp().run()
+    else:
+        print("No nameserver ip for pyro backend is provided")
+        print("Usage: python3 main.py <nameserver ip>")
+        print("example usage: python3 main.py PYRONAME:example.Atm")
+        exit()
+
