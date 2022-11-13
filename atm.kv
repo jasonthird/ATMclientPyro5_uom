@@ -1,0 +1,115 @@
+#:kivy 2.1.0
+<AuthPage>
+    name: 'auth'
+    BoxLayout:
+        orientation: 'vertical'
+        padding: 10
+        spacing: 10
+        position_hint: {'center_x':0.5, 'center_y':0.5}
+        Label:
+            text: 'Login'
+            font_size: 30
+            size_hint: 1, 0.2
+        BoxLayout:
+            orientation: 'horizontal'
+            size_hint: 1, 0.2
+            Label:
+                text: 'Username:'
+                size_hint: 0.3, 1
+            TextInput:
+                id: username
+                size_hint: 0.7, 1
+                multiline: False
+        BoxLayout:
+            orientation: 'horizontal'
+            size_hint: 1, 0.2
+            Label:
+                text: 'Pin:'
+                size_hint: 0.3, 1
+            TextInput:
+                id: pin
+                size_hint: 0.7, 1
+                password: True
+                multiline: False
+        Button:
+            text: 'Login'
+            size_hint: 1, 0.2
+            on_press: root.auth(username.text, pin.text)
+
+<ChoosePage>
+    name: 'choose'
+    BoxLayout:
+        orientation: 'vertical'
+        padding: 10
+        spacing: 10
+        position_hint: {'center_x':0.5, 'center_y':0.5}
+        BoxLayout:
+            orientation : 'horizontal'
+            size_hint: 1, 0.2
+            Label:
+                text: 'balance:'
+                size_hint: 0.3, 1
+            Label:
+                id: balance
+                size_hint: 0.7, 1
+        Button:
+            text: 'Withdraw'
+            size_hint: 1, 0.2
+            on_press: root.withdraw()
+        Button:
+            text: 'Deposit'
+            size_hint: 1, 0.2
+            on_press: root.deposit()
+
+<WithdrawPage>
+    name: 'withdraw'
+    BoxLayout:
+        orientation: 'vertical'
+        padding: 10
+        spacing: 10
+        position_hint: {'center_x':0.5, 'center_y':0.5}
+        BoxLayout:
+            orientation: 'horizontal'
+            size_hint: 1, 0.2
+            Label:
+                text: 'Amount:'
+                size_hint: 0.3, 1
+            TextInput:
+                id: amount_text
+                size_hint: 0.7, 1
+                multiline: False
+        Button:
+            text: 'Withdraw'
+            size_hint: 1, 0.2
+            on_press: root.withdraw(amount_text.text)
+        Button:
+            text: 'Back'
+            size_hint: 1, 0.2
+            on_press: root.back()
+
+<DepositPage>
+    name: 'deposit'
+    BoxLayout:
+        orientation: 'vertical'
+        padding: 10
+        spacing: 10
+        position_hint: {'center_x':0.5, 'center_y':0.5}
+        BoxLayout:
+            orientation: 'horizontal'
+            size_hint: 1, 0.2
+            Label:
+                text: 'Amount:'
+                size_hint: 0.3, 1
+            TextInput:
+                id: amount_text
+                size_hint: 0.7, 1
+                multiline: False
+        Button:
+            text: 'Deposit'
+            size_hint: 1, 0.2
+            on_press: root.deposit(amount_text.text)
+        Button:
+            text: 'Back'
+            size_hint: 1, 0.2
+            on_press: root.back()
+
